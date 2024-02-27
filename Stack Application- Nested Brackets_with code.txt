@@ -1,0 +1,70 @@
+To find and validate nested brackets using a stack implemented with arrays in C, you can follow these steps:
+
+1. Initialize an empty stack.
+2. Iterate through the characters in the input string.
+3. If an opening bracket (e.g., '(', '[', '{') is encountered, push it onto the stack.
+4. If a closing bracket (e.g., ')', ']', '}') is encountered, pop the top element from the stack and compare it to the current closing bracket.
+   - If they match (e.g., '(' matches with ')'), continue.
+   - If they don't match or the stack is empty, the brackets are not nested correctly.
+5. After processing all characters, if the stack is empty, all brackets are properly nested. If the stack is not empty, there are unmatched opening brackets.
+
+Here's a sample C program to find and validate nested brackets using a stack implemented with arrays:
+
+#include <stdio.h>
+#include <stdbool>
+
+#define MAX_SIZE 100
+
+char stack[MAX_SIZE];
+int top = -1;
+
+// Push operation
+void push(char bracket) {
+    if (top == MAX_SIZE - 1) {
+        printf("Stack is full. Cannot push %c.\n", bracket);
+        return;
+    }
+    stack[++top] = bracket;
+}
+
+// Pop operation
+char pop() {
+    if (top == -1) {
+        return '\0'; // Return null character for empty stack
+    }
+    return stack[top--];
+}
+
+// Function to check if brackets are properly nested
+bool areBracketsProperlyNested(char* str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        char current = str[i];
+        if (current == '(' || current == '[' || current == '{') {
+            push(current);
+        } else if (current == ')' || current == ']' || current == '}') {
+            char popped = pop();
+            if ((current == ')' && popped != '(') ||
+                (current == ']' && popped != '[') ||
+                (current == '}' && popped != '{')) {
+                return false; // Mismatched brackets
+            }
+        }
+    }
+    return (top == -1); // If the stack is empty, brackets are properly nested.
+}
+
+int main() {
+    char input[MAX_SIZE];
+    printf("Enter a string with brackets: ");
+    scanf("%s", input);
+
+    if (areBracketsProperlyNested(input)) {
+        printf("Brackets are properly nested.\n");
+    } else {
+        printf("Brackets are not properly nested.\n");
+    }
+
+    return 0;
+}
+
+This program checks whether the brackets in the input string are properly nested and provides the result accordingly.
